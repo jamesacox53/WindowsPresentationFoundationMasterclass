@@ -23,6 +23,114 @@ namespace Section_02___Calculator_App
         public CalculatorApp()
         {
             InitializeComponent();
+
+            resultLabel.Content = "12345";
+        }
+
+        private void acButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void negativeButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void percentageButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void divideButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void sevenButton_Click(object sender, RoutedEventArgs e)
+        {
+            buttonPressed("7");
+        }
+
+        private void eightButton_Click(object sender, RoutedEventArgs e)
+        {
+            buttonPressed("8");
+        }
+
+        private void nineButton_Click(object sender, RoutedEventArgs e)
+        {
+            buttonPressed("9");
+        }
+
+        private void multiplyButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void fourButton_Click(object sender, RoutedEventArgs e)
+        {
+            buttonPressed("4");
+        }
+
+        private void fiveButton_Click(object sender, RoutedEventArgs e)
+        {
+            buttonPressed("5");
+        }
+
+        private void sixButton_Click(object sender, RoutedEventArgs e)
+        {
+            buttonPressed("6");
+        }
+
+        private void minusButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void oneButton_Click(object sender, RoutedEventArgs e)
+        {
+            buttonPressed("1");
+        }
+
+        private void twoButton_Click(object sender, RoutedEventArgs e)
+        {
+            buttonPressed("2");
+        }
+
+        private void threeButton_Click(object sender, RoutedEventArgs e)
+        {
+            buttonPressed("3");
+        }
+
+        private void plusButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void zeroButton_Click(object sender, RoutedEventArgs e)
+        {
+            buttonPressed("0");
+        }
+
+        private void decimalButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void equalsButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonPressed(string element)
+        {
+            if (resultLabel.Content.ToString() == "0")
+            {
+                resultLabel.Content = element;
+                return;
+            }
+
+            resultLabel.Content = resultLabel.Content.ToString() + element;
         }
     }
 }
