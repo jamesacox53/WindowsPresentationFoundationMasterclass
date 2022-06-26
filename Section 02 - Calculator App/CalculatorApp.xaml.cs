@@ -18,9 +18,9 @@ namespace Section_02___Calculator_App
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class CalculatorApp : Window
     {
-        public MainWindow()
+        public CalculatorApp()
         {
             InitializeComponent();
         }
