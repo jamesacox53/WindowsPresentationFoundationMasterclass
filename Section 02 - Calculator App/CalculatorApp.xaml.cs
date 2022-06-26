@@ -20,117 +20,153 @@ namespace Section_02___Calculator_App
     /// </summary>
     public partial class CalculatorApp : Window
     {
+        private double lastNumber;
+        private string? op = null;
+
         public CalculatorApp()
         {
             InitializeComponent();
-
-            resultLabel.Content = "12345";
         }
 
         private void acButton_Click(object sender, RoutedEventArgs e)
         {
-
+            resultLabel.Content = "0";
         }
 
         private void negativeButton_Click(object sender, RoutedEventArgs e)
         {
+            if (double.TryParse(resultLabel.Content.ToString(), out lastNumber))
+            {
+                lastNumber *= -1;
 
+                resultLabel.Content = lastNumber.ToString();
+            }
         }
 
         private void percentageButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (double.TryParse(resultLabel.Content.ToString(), out double tempNumber))
+            {
+                double resNumber;
+                
+                if (lastNumber == 0)
+                {
+                    resNumber = tempNumber / 100;
+                }
+                else
+                {
+                    resNumber = lastNumber * (tempNumber / 100);
+                }
+                
+                resultLabel.Content = resNumber.ToString();
+            }
         }
 
-        private void divideButton_Click(object sender, RoutedEventArgs e)
+        private void operatorButton_Click(object sender, RoutedEventArgs e)
         {
+            double tempNum;
 
+            if (!double.TryParse(resultLabel.Content.ToString(), out tempNum)) 
+                return;
+
+            string oper;
+
+            try
+            {
+                oper = GetContentFromButton(sender);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            lastNumber = tempNum;
+
+            op = oper;
+
+            resultLabel.Content = "0";
         }
 
-        private void sevenButton_Click(object sender, RoutedEventArgs e)
+        private void numberButton_Click(object sender, RoutedEventArgs e)
         {
-            buttonPressed("7");
-        }
+            string number;
+            
+            try
+            {
+                number = GetContentFromButton(sender);
+            }
+            catch(Exception)
+            {
+                return;
+            }
 
-        private void eightButton_Click(object sender, RoutedEventArgs e)
-        {
-            buttonPressed("8");
-        }
+            if (resultLabel.Content.ToString() == "0")
+            {
+                resultLabel.Content = number;
+                return;
+            }
 
-        private void nineButton_Click(object sender, RoutedEventArgs e)
-        {
-            buttonPressed("9");
-        }
-
-        private void multiplyButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void fourButton_Click(object sender, RoutedEventArgs e)
-        {
-            buttonPressed("4");
-        }
-
-        private void fiveButton_Click(object sender, RoutedEventArgs e)
-        {
-            buttonPressed("5");
-        }
-
-        private void sixButton_Click(object sender, RoutedEventArgs e)
-        {
-            buttonPressed("6");
-        }
-
-        private void minusButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void oneButton_Click(object sender, RoutedEventArgs e)
-        {
-            buttonPressed("1");
-        }
-
-        private void twoButton_Click(object sender, RoutedEventArgs e)
-        {
-            buttonPressed("2");
-        }
-
-        private void threeButton_Click(object sender, RoutedEventArgs e)
-        {
-            buttonPressed("3");
-        }
-
-        private void plusButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void zeroButton_Click(object sender, RoutedEventArgs e)
-        {
-            buttonPressed("0");
+            resultLabel.Content = resultLabel.Content.ToString() + number;
         }
 
         private void decimalButton_Click(object sender, RoutedEventArgs e)
         {
+            string? content = resultLabel.Content.ToString();
 
+            if (content == null || content == "0")
+            {
+                resultLabel.Content = ".";
+                return;
+            }
+
+            if (content.Contains('.')) return;
+
+            resultLabel.Content = content + ".";
         }
 
         private void equalsButton_Click(object sender, RoutedEventArgs e)
         {
+            if (op == null) return;
 
-        }
+            double secondNumber;
 
-        private void buttonPressed(string element)
-        {
-            if (resultLabel.Content.ToString() == "0")
-            {
-                resultLabel.Content = element;
+            if (!double.TryParse(resultLabel.Content.ToString(), out secondNumber))
                 return;
+
+            double result;
+
+            if (op == "+")
+                result = lastNumber + secondNumber;
+            else if (op == "-")
+                result = lastNumber - secondNumber;
+            else if (op == "*")
+                result = lastNumber * secondNumber;
+            else
+            {
+                if (secondNumber == 0) 
+                {
+                    MessageBox.Show("Cannot divide by 0.", "Wrong Operation", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return; 
+                }
+                result = lastNumber / secondNumber;
             }
 
-            resultLabel.Content = resultLabel.Content.ToString() + element;
+            resultLabel.Content = result.ToString();
+            lastNumber = result;
+
+            op = null;
+        }
+
+        private string GetContentFromButton(object sender)
+        {
+            Button button = (Button)sender;
+
+            string? content = button.Content.ToString();
+
+            if (content == null)
+                throw new ArgumentNullException();
+
+            return content.ToString();
         }
     }
 }
