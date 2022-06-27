@@ -23,7 +23,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <Label x:Name="resultLabel" Content="0" Grid.ColumnSpan="4" FontSize="60" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        <Label x:Name="resultLabel" Content="0" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
         
         <Button x:Name="acButton" Content="AC" Click="acButton_Click" Grid.Row="1" Margin="5"/>
         <Button x:Name="negativeButton" Content="+/-" Click="negativeButton_Click" Grid.Row="1" Grid.Column="1" Margin="5"/>
