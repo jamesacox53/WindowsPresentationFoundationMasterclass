@@ -40,12 +40,17 @@ namespace Section_06___Contacts_App
 
         private void ReadDatabase()
         {
+            List<Contact> contacts;
+
             using (SQLiteConnection connection = new SQLiteConnection(App.databasePath))
             {
                 connection.CreateTable<Contact>();
-                List<Contact> contacts = connection.Table<Contact>().ToList();
+                contacts = connection.Table<Contact>().ToList();
             }
 
+            if (contacts == null) return;
+
+            contactsListView.ItemsSource = contacts;
         }
     }
 }
