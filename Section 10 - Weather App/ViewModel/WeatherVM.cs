@@ -1,4 +1,7 @@
 ﻿using Section_10___Weather_App.Model;
+using Section_10___Weather_App.Model.Design;
+using Section_10___Weather_App.ViewModel.Commands;
+using Section_10___Weather_App.ViewModel.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -48,9 +51,27 @@ namespace Section_10___Weather_App.ViewModel
             }
         }
 
+        public SearchCommand SearchCommand { get; set; }
+
+        public WeatherVM()
+        {
+            SearchCommand = new SearchCommand(this);
+            
+            if (!DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+                return;
+
+            SelectedCity = (new DesignCity());
+            CurrentConditions = (new DesignCurrentConditions());
+        }
+
         private void OnPropertyChanged(string property)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
+
+        public async void MakeQuery()
+        {
+            List<City> cities = await AccuweatherHelper.GetCitiesAsync(Query);
         }
     }
 }
