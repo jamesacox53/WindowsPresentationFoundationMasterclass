@@ -11,7 +11,11 @@ namespace Section_10___Weather_App.ViewModel.Commands
     {
         public WeatherVM WeatherVM { get; set; }
 
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
 
         public SearchCommand(WeatherVM weatherVM)
         {
@@ -20,6 +24,11 @@ namespace Section_10___Weather_App.ViewModel.Commands
 
         public bool CanExecute(object? parameter)
         {
+            if (parameter == null) return false;
+            string query = parameter.ToString();
+
+            if (string.IsNullOrWhiteSpace(query)) return false;
+
             return true;
         }
 
