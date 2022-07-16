@@ -22,14 +22,14 @@ namespace Section_10___Weather_App.Model
 
     public class Metric
     {
-        public double Value { get; set; }
+        public string Value { get; set; }
         public string Unit { get; set; }
         public int UnitType { get; set; }
     }
 
     public class Imperial
     {
-        public int Value { get; set; }
+        public string Value { get; set; }
         public string Unit { get; set; }
         public int UnitType { get; set; }
     }

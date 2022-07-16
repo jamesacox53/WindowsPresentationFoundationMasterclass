@@ -4,6 +4,7 @@ using Section_10___Weather_App.ViewModel.Commands;
 using Section_10___Weather_App.ViewModel.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -36,6 +37,7 @@ namespace Section_10___Weather_App.ViewModel
             {
                 selectedCity = value;
                 OnPropertyChanged("SelectedCity");
+                GetCurrentConditions();
             }
         }
 
@@ -53,9 +55,12 @@ namespace Section_10___Weather_App.ViewModel
 
         public SearchCommand SearchCommand { get; set; }
 
+        public ObservableCollection<City> Cities { get; set; }
+
         public WeatherVM()
         {
             SearchCommand = new SearchCommand(this);
+            Cities = new ObservableCollection<City>();
             
             if (!DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
                 return;
@@ -72,6 +77,20 @@ namespace Section_10___Weather_App.ViewModel
         public async void MakeQuery()
         {
             List<City> cities = await AccuweatherHelper.GetCitiesAsync(Query);
+
+            Cities.Clear();
+
+            foreach(City city in cities)
+            {
+                Cities.Add(city);
+            }
+        }
+
+        private async void GetCurrentConditions()
+        {
+            if (SelectedCity == null || SelectedCity.Key == null) return;
+
+            CurrentConditions = await AccuweatherHelper.GetCurrentConditionsAsync(SelectedCity.Key);
         }
     }
 }

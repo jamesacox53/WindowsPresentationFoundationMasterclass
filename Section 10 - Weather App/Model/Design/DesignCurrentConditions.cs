@@ -15,7 +15,7 @@ namespace Section_10___Weather_App.Model.Design
             {
                 Metric = new Metric()
                 {
-                    Value = 25
+                    Value = "25"
                 }
             };
         }
