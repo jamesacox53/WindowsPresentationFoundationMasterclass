@@ -34,6 +34,7 @@ namespace Section_10___Weather_App.ViewModel.Commands
 
         public void Execute(object? parameter)
         {
+            WeatherVM.ClearCityWetherInfoFields();
             WeatherVM.MakeQuery();
         }
     }

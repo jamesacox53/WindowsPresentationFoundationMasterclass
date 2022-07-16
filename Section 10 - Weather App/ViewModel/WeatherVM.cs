@@ -55,11 +55,14 @@ namespace Section_10___Weather_App.ViewModel
 
         public SearchCommand SearchCommand { get; set; }
 
+        public AccuweatherWebsiteCommand AccuweatherWebsiteCommand { get; set; }
+
         public ObservableCollection<City> Cities { get; set; }
 
         public WeatherVM()
         {
             SearchCommand = new SearchCommand(this);
+            AccuweatherWebsiteCommand = new AccuweatherWebsiteCommand(this);
             Cities = new ObservableCollection<City>();
             
             if (!DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
@@ -91,6 +94,12 @@ namespace Section_10___Weather_App.ViewModel
             if (SelectedCity == null || SelectedCity.Key == null) return;
 
             CurrentConditions = await AccuweatherHelper.GetCurrentConditionsAsync(SelectedCity.Key);
+        }
+
+        public void ClearCityWetherInfoFields()
+        {
+            SelectedCity = null;
+            CurrentConditions = null;
         }
     }
 }

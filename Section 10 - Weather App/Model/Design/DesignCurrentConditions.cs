@@ -11,6 +11,7 @@ namespace Section_10___Weather_App.Model.Design
         public DesignCurrentConditions()
         {
             WeatherText = "Partly Cloudy";
+            HasPrecipitation = true;
             Temperature = new Temperature()
             {
                 Metric = new Metric()

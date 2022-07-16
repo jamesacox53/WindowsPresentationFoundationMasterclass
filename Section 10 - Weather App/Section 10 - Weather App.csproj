@@ -9,7 +9,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="View\AccuweatherLogo.png\**" />
+    <EmbeddedResource Remove="View\AccuweatherLogo.png\**" />
+    <None Remove="View\AccuweatherLogo.png\**" />
+    <Page Remove="View\AccuweatherLogo.png\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Images\AccuweatherLogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\AccuweatherLogo.png" />
   </ItemGroup>
 
 </Project>
