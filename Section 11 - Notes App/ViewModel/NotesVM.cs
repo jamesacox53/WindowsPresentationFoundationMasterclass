@@ -1,5 +1,6 @@
 ﻿using Section_11___Notes_App.Model;
 using Section_11___Notes_App.ViewModel.Commands;
+using Section_11___Notes_App.ViewModel.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,10 +31,36 @@ namespace Section_11___Notes_App.ViewModel
 
         public NewNoteCommand NewNoteCommand { get; set; }
 
+        public CloseApplicationCommand CloseApplicationCommand { get; set; }
+
         public NotesVM()
         {
             NewNotebookCommand = new NewNotebookCommand(this);
             NewNoteCommand = new NewNoteCommand(this);
+            CloseApplicationCommand = new CloseApplicationCommand();
+        }
+
+        public void CreateNotebook()
+        {
+            Notebook newNotebook = new Notebook() 
+            {
+                Name = "New Notebook"
+            };
+
+            DatabaseHelper.Insert<Notebook>(newNotebook);
+        }
+
+        public void CreateNote(int notebookId)
+        {
+            Note newNote = new Note()
+            {
+                Title = "New Note",
+                NotebookId = notebookId,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+            };
+
+            DatabaseHelper.Insert<Note>(newNote);
         }
     }
 }

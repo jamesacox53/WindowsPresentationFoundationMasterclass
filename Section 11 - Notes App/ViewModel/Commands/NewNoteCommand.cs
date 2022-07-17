@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Section_11___Notes_App.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,12 +20,27 @@ namespace Section_11___Notes_App.ViewModel.Commands
 
         public bool CanExecute(object? parameter)
         {
-            return true;
+            return CheckNotebookExists(parameter);
         }
 
         public void Execute(object? parameter)
         {
-            throw new NotImplementedException();
+            if (!CheckNotebookExists(parameter)) return;
+
+            Notebook selectedNotebook = parameter as Notebook;
+
+            NotesVM.CreateNote(selectedNotebook.Id);
+        }
+
+        private bool CheckNotebookExists(object? parameter) 
+        {
+            if (parameter == null) return false;
+
+            Notebook selectedNotebook = parameter as Notebook;
+
+            if (selectedNotebook == null) return false;
+
+            return true;
         }
     }
 }
