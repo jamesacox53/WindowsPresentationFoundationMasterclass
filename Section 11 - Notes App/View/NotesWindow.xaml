@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Section_11___Notes_App.View"
         xmlns:vm="clr-namespace:Section_11___Notes_App.ViewModel"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="350" Width="300">
+        Title="NotesWindow" Height="350" Width="500">
     <Window.Resources>
         <vm:NotesVM x:Key="NotesVM"/>
     </Window.Resources>
@@ -22,8 +22,25 @@
 
             </MenuItem>
         </Menu>
-        <Grid DockPanel.Dock="Bottom">
-            
-        </Grid>
+        <ListView ItemsSource="{Binding Path=Notebooks}" DockPanel.Dock="Left" Width="140">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate> 
+        </ListView>
+        <ListView ItemsSource="{Binding Path=Notes}" DockPanel.Dock="Left" Width="140">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=Title}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button Content="Speech" Command="{Binding Path=ListenToSpeechCommand}"/>
+            </ToolBar>
+        </ToolBarTray>
+        <Grid/>
     </DockPanel>
 </Window>

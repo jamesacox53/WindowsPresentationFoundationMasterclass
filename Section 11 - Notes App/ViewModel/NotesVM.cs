@@ -33,11 +33,14 @@ namespace Section_11___Notes_App.ViewModel
 
         public CloseApplicationCommand CloseApplicationCommand { get; set; }
 
+        public ListenToSpeechCommand ListenToSpeechCommand { get; set; }
+
         public NotesVM()
         {
             NewNotebookCommand = new NewNotebookCommand(this);
             NewNoteCommand = new NewNoteCommand(this);
             CloseApplicationCommand = new CloseApplicationCommand();
+            ListenToSpeechCommand = new ListenToSpeechCommand(this);
         }
 
         public void CreateNotebook()
@@ -61,6 +64,11 @@ namespace Section_11___Notes_App.ViewModel
             };
 
             DatabaseHelper.Insert<Note>(newNote);
+        }
+
+        public void ListenToSpeech()
+        {
+
         }
     }
 }
