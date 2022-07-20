@@ -18,11 +18,14 @@
                 <MenuItem Header="New Note" Command="{Binding Path=NewNoteCommand}" CommandParameter="{Binding Path=SelectedNotebook}"/>
                 <Separator/>
                 <MenuItem Header="Exit" Command="{Binding Path=CloseApplicationCommand}"/>
-
-
             </MenuItem>
         </Menu>
-        <ListView ItemsSource="{Binding Path=Notebooks}" SelectedValue="{Binding Path=SelectedNotebook, Mode=TwoWay}" DockPanel.Dock="Left" Width="140">
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock x:Name="statusTextBlock"/>
+            </StatusBarItem>
+        </StatusBar>
+        <ListView ItemsSource="{Binding Path=Notebooks}" SelectedValue="{Binding Path=SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Left" Width="140">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Path=Name}"/>
@@ -39,8 +42,13 @@
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
                 <Button Content="Speech" Command="{Binding Path=ListenToSpeechCommand}"/>
+                <Button x:Name="boldButton" Click="boldButton_Click">
+                    <TextBlock Text="B" FontWeight="Bold"/>
+                </Button>
             </ToolBar>
         </ToolBarTray>
-        <Grid/>
+        <Grid>
+            <RichTextBox x:Name="contentsRichTextBox" TextChanged="contentRichTextBox_TextChanged"/>
+        </Grid>
     </DockPanel>
 </Window>

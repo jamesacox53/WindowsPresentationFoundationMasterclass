@@ -23,5 +23,20 @@ namespace Section_11___Notes_App.View
         {
             InitializeComponent();
         }
+
+        private void contentRichTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextPointer textStart = contentsRichTextBox.Document.ContentStart;
+            TextPointer textEnd = contentsRichTextBox.Document.ContentEnd;
+
+            int ammountOfCharacter = ((new TextRange(textStart, textEnd)).Text.Length) - 2;
+
+            statusTextBlock.Text = $"Document Length: {ammountOfCharacter} characters";
+        }
+
+        private void boldButton_Click(object sender, RoutedEventArgs e)
+        {
+            contentsRichTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+        }
     }
 }
