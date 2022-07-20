@@ -11,7 +11,17 @@ namespace Section_11___Notes_App.ViewModel.Commands
     public class NewNoteCommand : ICommand
     {
         public NotesVM NotesVM { get; set; }
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged 
+        {
+            add 
+            {
+                CommandManager.RequerySuggested += value;
+            }
+            remove 
+            {
+                CommandManager.RequerySuggested -= value;
+            }
+        }
 
         public NewNoteCommand(NotesVM notesVM)
         {

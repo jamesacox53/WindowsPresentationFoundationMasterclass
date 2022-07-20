@@ -22,7 +22,7 @@
 
             </MenuItem>
         </Menu>
-        <ListView ItemsSource="{Binding Path=Notebooks}" DockPanel.Dock="Left" Width="140">
+        <ListView ItemsSource="{Binding Path=Notebooks}" SelectedValue="{Binding Path=SelectedNotebook, Mode=TwoWay}" DockPanel.Dock="Left" Width="140">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Path=Name}"/>
