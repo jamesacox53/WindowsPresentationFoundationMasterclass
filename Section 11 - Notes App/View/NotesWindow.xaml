@@ -41,7 +41,7 @@
         </ListView>
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button Content="Speech" Command="{Binding Path=ListenToSpeechCommand}"/>
+                <Button Content="Speech" Click="SpeechButton_Click"/>
                 <Button x:Name="boldButton" Click="boldButton_Click">
                     <TextBlock Text="B" FontWeight="Bold"/>
                 </Button>

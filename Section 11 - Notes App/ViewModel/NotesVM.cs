@@ -7,7 +7,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Section_11___Notes_App.ViewModel
 {
@@ -36,7 +35,6 @@ namespace Section_11___Notes_App.ViewModel
 
         public CloseApplicationCommand CloseApplicationCommand { get; set; }
 
-        public ListenToSpeechCommand ListenToSpeechCommand { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -45,7 +43,6 @@ namespace Section_11___Notes_App.ViewModel
             NewNotebookCommand = new NewNotebookCommand(this);
             NewNoteCommand = new NewNoteCommand(this);
             CloseApplicationCommand = new CloseApplicationCommand();
-            ListenToSpeechCommand = new ListenToSpeechCommand(this);
 
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
@@ -78,11 +75,6 @@ namespace Section_11___Notes_App.ViewModel
             DatabaseHelper.Insert<Note>(newNote);
 
             GetNotes();
-        }
-
-        public void ListenToSpeech()
-        {
-
         }
 
         private void GetNotebooks()
