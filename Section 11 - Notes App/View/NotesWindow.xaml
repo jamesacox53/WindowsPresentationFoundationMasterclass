@@ -42,13 +42,13 @@
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
                 <Button Content="Speech" Click="SpeechButton_Click"/>
-                <Button x:Name="boldButton" Click="boldButton_Click">
+                <ToggleButton x:Name="boldButton" Click="boldButton_Click">
                     <TextBlock Text="B" FontWeight="Bold"/>
-                </Button>
+                </ToggleButton>
             </ToolBar>
         </ToolBarTray>
         <Grid>
-            <RichTextBox x:Name="contentsRichTextBox" TextChanged="contentRichTextBox_TextChanged"/>
+            <RichTextBox x:Name="contentsRichTextBox" TextChanged="contentRichTextBox_TextChanged" SelectionChanged="contentsRichTextBox_SelectionChanged"/>
         </Grid>
     </DockPanel>
 </Window>

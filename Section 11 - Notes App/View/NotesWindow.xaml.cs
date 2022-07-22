@@ -43,7 +43,16 @@ namespace Section_11___Notes_App.View
 
         private void boldButton_Click(object sender, RoutedEventArgs e)
         {
-            contentsRichTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+            bool isBoldChecked = boldButton.IsChecked ?? false;
+
+            if (isBoldChecked)
+            {
+                contentsRichTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+            }
+            else
+            {
+                contentsRichTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
+            }
         }
 
         bool isRecording = false;
@@ -97,6 +106,21 @@ namespace Section_11___Notes_App.View
             string recognizedText = e.Result.Text;
 
             contentsRichTextBox.Document.Blocks.Add(new Paragraph(new Run(recognizedText)));
+        }
+
+        private void contentsRichTextBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            Object selectedWeight = contentsRichTextBox.Selection.GetPropertyValue(FontWeightProperty);
+
+            bool isUnsetValue = (selectedWeight == DependencyProperty.UnsetValue);
+            
+            if (isUnsetValue)
+            {
+                boldButton.IsChecked = false;
+                return;
+            }
+
+            boldButton.IsChecked = selectedWeight.Equals(FontWeights.Bold);
         }
     }
 }
