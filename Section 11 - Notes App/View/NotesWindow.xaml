@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Section_11___Notes_App.View"
         xmlns:vm="clr-namespace:Section_11___Notes_App.ViewModel"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="350" Width="500">
+        Title="NotesWindow" Height="350" Width="700">
     <Window.Resources>
         <vm:NotesVM x:Key="NotesVM"/>
     </Window.Resources>
@@ -45,6 +45,14 @@
                 <ToggleButton x:Name="boldButton" Click="boldButton_Click">
                     <TextBlock Text="B" FontWeight="Bold"/>
                 </ToggleButton>
+                <ToggleButton x:Name="italicsButton" Click="italicsButton_Click">
+                    <TextBlock Text="I" FontStyle="Italic"/>
+                </ToggleButton>
+                <ToggleButton x:Name="underlineButton" Click="underlineButton_Click">
+                    <TextBlock Text="U" TextDecorations="Underline"/>
+                </ToggleButton>
+                <ComboBox x:Name="fontFamilyComboBox" Width="100" SelectionChanged="fontFamilyComboBox_SelectionChanged"/>
+                <ComboBox x:Name="fontSizeComboBox" Width="50" TextBoxBase.TextChanged="fontSizeComboBox_TextChanged" IsEditable="True"/>
             </ToolBar>
         </ToolBarTray>
         <Grid>

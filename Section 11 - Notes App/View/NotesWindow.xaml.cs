@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Speech.Recognition;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 
 namespace Section_11___Notes_App.View
 {
@@ -29,6 +30,25 @@ namespace Section_11___Notes_App.View
             InitializeComponent();
 
             speechRecognizer = SetUpSpeechRecognitionEngine();
+
+            SetUpFontFamilyComboBox();
+
+            SetUpFontSizeComboBox();
+        }
+
+        private void SetUpFontFamilyComboBox()
+        {
+            IEnumerable<FontFamily> fontFamilies = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
+            fontFamilyComboBox.ItemsSource = fontFamilies;
+        }
+
+        private void SetUpFontSizeComboBox()
+        {
+            IEnumerable<double> fontSizes = new List<double>() 
+            {
+                8, 9, 10, 12, 14, 16, 20
+            };
+            fontSizeComboBox.ItemsSource = fontSizes;
         }
 
         private void contentRichTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -110,17 +130,82 @@ namespace Section_11___Notes_App.View
 
         private void contentsRichTextBox_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            Object selectedWeight = contentsRichTextBox.Selection.GetPropertyValue(FontWeightProperty);
+            Object selectedFontWeight = contentsRichTextBox.Selection.GetPropertyValue(Inline.FontWeightProperty);
+            Object selectedFontStyle = contentsRichTextBox.Selection.GetPropertyValue(Inline.FontStyleProperty);
+            Object selectedFontDecoration = contentsRichTextBox.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
 
-            bool isUnsetValue = (selectedWeight == DependencyProperty.UnsetValue);
-            
+            setButtonCheckStatus(boldButton, selectedFontWeight, FontWeights.Bold);
+            setButtonCheckStatus(italicsButton, selectedFontStyle, FontStyles.Italic);
+            setButtonCheckStatus(underlineButton, selectedFontDecoration, TextDecorations.Underline);
+
+            fontFamilyComboBox.SelectedItem = contentsRichTextBox.Selection.GetPropertyValue(Inline.FontFamilyProperty);
+            fontSizeComboBox.Text = contentsRichTextBox.Selection.GetPropertyValue(Inline.FontSizeProperty).ToString();
+        }
+
+        private void setButtonCheckStatus(ToggleButton button, Object selectedProperty, Object propertyWanted)
+        {
+            bool isUnsetValue = (selectedProperty == DependencyProperty.UnsetValue);
+
             if (isUnsetValue)
             {
-                boldButton.IsChecked = false;
+                button.IsChecked = false;
                 return;
             }
 
-            boldButton.IsChecked = selectedWeight.Equals(FontWeights.Bold);
+            button.IsChecked = selectedProperty.Equals(propertyWanted);
+        }
+
+        private void italicsButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool isItalicsChecked = italicsButton.IsChecked ?? false;
+
+            if (isItalicsChecked)
+            {
+                contentsRichTextBox.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Italic);
+            }
+            else
+            {
+                contentsRichTextBox.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Normal);
+            }
+        }
+
+        private void underlineButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool isUnderlineChecked = underlineButton.IsChecked ?? false;
+
+            if (isUnderlineChecked)
+            {
+                contentsRichTextBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
+            }
+            else
+            {
+                TextDecorationCollection textDecorations;
+                TextDecorationCollection? textDec = (contentsRichTextBox.Selection.GetPropertyValue(Inline.TextDecorationsProperty) as TextDecorationCollection);
+
+                if (textDec == null) return;
+
+                textDec.TryRemove(TextDecorations.Underline, out textDecorations);
+
+                contentsRichTextBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, textDecorations);
+            }
+        }
+
+        private void fontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Object selectedItem = fontFamilyComboBox.SelectedItem;
+
+            if (selectedItem == null) return;
+
+            contentsRichTextBox.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, selectedItem);
+        }
+
+        private void fontSizeComboBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string fontSizeString = fontSizeComboBox.Text;
+
+            if (fontSizeString == null || !(double.TryParse(fontSizeString, out double res))) return;
+
+            contentsRichTextBox.Selection.ApplyPropertyValue(Inline.FontSizeProperty, fontSizeString);
         }
     }
 }
