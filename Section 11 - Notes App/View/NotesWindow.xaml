@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:Section_11___Notes_App.View"
         xmlns:vm="clr-namespace:Section_11___Notes_App.ViewModel"
         xmlns:uc="clr-namespace:Section_11___Notes_App.View.UserControls"
@@ -37,7 +38,13 @@
                                 </ContextMenu>
                             </uc:DisplayNotebookUserControl.ContextMenu>
                         </uc:DisplayNotebookUserControl>
-                        <TextBox Text="{Binding Path=Name}" Visibility="{Binding Source={StaticResource NotesVM}, Path=IsVisible}"/>
+                        <TextBox Text="{Binding Path=Name}" Visibility="{Binding Source={StaticResource NotesVM}, Path=IsVisible}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource NotesVM}, Path=EndEditingCommand}" CommandParameter="{Binding}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate> 

@@ -38,6 +38,8 @@ namespace Section_11___Notes_App.ViewModel
 
         public EditCommand EditCommand { get; set; }
 
+        public EndEditingCommand EndEditingCommand { get; set; }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private Visibility isVisible;
@@ -58,6 +60,7 @@ namespace Section_11___Notes_App.ViewModel
             NewNoteCommand = new NewNoteCommand(this);
             CloseApplicationCommand = new CloseApplicationCommand();
             EditCommand = new EditCommand(this);
+            EndEditingCommand = new EndEditingCommand(this);
 
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
@@ -128,6 +131,15 @@ namespace Section_11___Notes_App.ViewModel
         public void StartEditing()
         {
             IsVisible = Visibility.Visible;
+        }
+
+        public void StopEditing(Notebook notebook)
+        {
+            IsVisible = Visibility.Collapsed;
+
+            DatabaseHelper.Update(notebook);
+
+            GetNotebooks();
         }
     }
 }
