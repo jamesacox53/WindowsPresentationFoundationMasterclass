@@ -15,6 +15,11 @@ using System.Speech.Recognition;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
+using Section_11___Notes_App.ViewModel;
+using Section_11___Notes_App.Model;
+using Path = System.IO.Path;
+using Section_11___Notes_App.ViewModel.Helpers;
+using System.IO;
 
 namespace Section_11___Notes_App.View
 {
@@ -25,11 +30,20 @@ namespace Section_11___Notes_App.View
     {
         private SpeechRecognitionEngine speechRecognizer;
 
+        private NotesVM? notesVM;
+
         public NotesWindow()
         {
             InitializeComponent();
 
             speechRecognizer = SetUpSpeechRecognitionEngine();
+
+            notesVM = (Resources["NotesVM"] as NotesVM); 
+
+            if (notesVM != null)
+            {
+                notesVM.SelectedNoteChanged += NotesVM_SelectedNoteChanged;
+            }
 
             SetUpFontFamilyComboBox();
 
@@ -206,6 +220,50 @@ namespace Section_11___Notes_App.View
             if (fontSizeString == null || !(double.TryParse(fontSizeString, out double res))) return;
 
             contentsRichTextBox.Selection.ApplyPropertyValue(Inline.FontSizeProperty, fontSizeString);
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (notesVM == null) return;
+
+            Note selectedNote = notesVM.SelectedNote;
+
+            if (selectedNote == null) return;
+
+            string rtfFileName = $"{selectedNote.Id}.rtf";
+
+            string rtfFilePath = Path.Combine(Environment.CurrentDirectory, rtfFileName);
+
+            selectedNote.FileLocation = rtfFilePath;
+
+            DatabaseHelper.Update(selectedNote);
+
+            FileStream fileStream = new FileStream(rtfFilePath, FileMode.Create);
+
+            TextRange contents = new TextRange(contentsRichTextBox.Document.ContentStart, contentsRichTextBox.Document.ContentEnd);
+
+            contents.Save(fileStream, DataFormats.Rtf);
+        }
+
+        private void NotesVM_SelectedNoteChanged(object? sender, EventArgs e)
+        {
+            contentsRichTextBox.Document.Blocks.Clear();
+
+            if (notesVM == null) return;
+
+            Note selectedNote = notesVM.SelectedNote;
+
+            if (selectedNote == null) return;
+
+            string fileLocation = selectedNote.FileLocation;
+
+            if (string.IsNullOrEmpty(fileLocation)) return;
+
+            FileStream fileStream = new FileStream(fileLocation, FileMode.Open);
+
+            TextRange contents = new TextRange(contentsRichTextBox.Document.ContentStart, contentsRichTextBox.Document.ContentEnd);
+
+            contents.Load(fileStream, DataFormats.Rtf);
         }
     }
 }

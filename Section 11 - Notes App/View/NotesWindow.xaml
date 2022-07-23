@@ -49,10 +49,25 @@
                 </DataTemplate>
             </ListView.ItemTemplate> 
         </ListView>
-        <ListView ItemsSource="{Binding Path=Notes}" DockPanel.Dock="Left" Width="140" Background="LightBlue" HorizontalContentAlignment="Center">
+        <ListView ItemsSource="{Binding Path=Notes}" SelectedValue="{Binding Path=SelectedNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Left" Width="140" Background="LightBlue" HorizontalContentAlignment="Center">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <uc:DisplayNoteUserControl Note="{Binding}"/>
+                    <Grid>
+                    <uc:DisplayNoteUserControl Note="{Binding}">
+                        <uc:DisplayNoteUserControl.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Rename" Command="{Binding Source={StaticResource NotesVM}, Path=EditNoteCommand}"/>
+                            </ContextMenu>
+                        </uc:DisplayNoteUserControl.ContextMenu>
+                    </uc:DisplayNoteUserControl>
+                    <TextBox Text="{Binding Path=Title}" Visibility="{Binding Source={StaticResource NotesVM}, Path=IsVisibleNote}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="LostFocus">
+                                <i:InvokeCommandAction Command="{Binding Source={StaticResource NotesVM}, Path=EndNoteEditingCommand}" CommandParameter="{Binding}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        </TextBox>
+                        </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -70,6 +85,7 @@
                 </ToggleButton>
                 <ComboBox x:Name="fontFamilyComboBox" Width="100" SelectionChanged="fontFamilyComboBox_SelectionChanged"/>
                 <ComboBox x:Name="fontSizeComboBox" Width="50" TextBoxBase.TextChanged="fontSizeComboBox_TextChanged" IsEditable="True"/>
+                <Button Content="Save" Click="SaveButton_Click"/>
             </ToolBar>
         </ToolBarTray>
         <Grid>

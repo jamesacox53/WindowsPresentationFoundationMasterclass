@@ -28,6 +28,19 @@ namespace Section_11___Notes_App.ViewModel
             }
         }
 
+        private Note selectedNote;
+
+        public Note SelectedNote
+        {
+            get { return selectedNote; }
+            set
+            {
+                selectedNote = value;
+                OnPropertyChanged("SelectedNote");
+                SelectedNoteChanged?.Invoke(this, new EventArgs());
+            }
+        }
+
         public ObservableCollection<Note> Notes { get; set; }
 
         public NewNotebookCommand NewNotebookCommand { get; set; }
@@ -40,7 +53,13 @@ namespace Section_11___Notes_App.ViewModel
 
         public EndEditingCommand EndEditingCommand { get; set; }
 
+        public EditNoteCommand EditNoteCommand { get; set; }
+
+        public EndNoteEditingCommand EndNoteEditingCommand { get; set; }
+
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        public event EventHandler SelectedNoteChanged;
 
         private Visibility isVisible;
 
@@ -54,6 +73,18 @@ namespace Section_11___Notes_App.ViewModel
             }
         }
 
+        private Visibility isVisibleNote;
+
+        public Visibility IsVisibleNote
+        {
+            get { return isVisibleNote; }
+            set
+            {
+                isVisibleNote = value;
+                OnPropertyChanged("IsVisibleNote");
+            }
+        }
+
         public NotesVM()
         {
             NewNotebookCommand = new NewNotebookCommand(this);
@@ -61,11 +92,15 @@ namespace Section_11___Notes_App.ViewModel
             CloseApplicationCommand = new CloseApplicationCommand();
             EditCommand = new EditCommand(this);
             EndEditingCommand = new EndEditingCommand(this);
+            EditNoteCommand = new EditNoteCommand(this);
+            EndNoteEditingCommand = new EndNoteEditingCommand(this);
 
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
 
             IsVisible = Visibility.Collapsed;
+
+            IsVisibleNote = Visibility.Collapsed;
 
             GetNotebooks();
         }
@@ -140,6 +175,20 @@ namespace Section_11___Notes_App.ViewModel
             DatabaseHelper.Update(notebook);
 
             GetNotebooks();
+        }
+
+        public void StartEditingNote()
+        {
+            IsVisibleNote = Visibility.Visible;
+        }
+
+        public void StopEditingNote(Note note)
+        {
+            IsVisibleNote = Visibility.Collapsed;
+
+            DatabaseHelper.Update(note);
+
+            GetNotes();
         }
     }
 }
