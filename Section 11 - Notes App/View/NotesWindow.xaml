@@ -29,7 +29,16 @@
         <ListView ItemsSource="{Binding Path=Notebooks}" SelectedValue="{Binding Path=SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Left" Background="LightGreen" Width="140" HorizontalContentAlignment="Center">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <uc:DisplayNotebookUserControl Notebook="{Binding}"/>
+                    <Grid>
+                        <uc:DisplayNotebookUserControl Notebook="{Binding}">
+                            <uc:DisplayNotebookUserControl.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Rename" Command="{Binding Source={StaticResource NotesVM}, Path=EditCommand}"/>
+                                </ContextMenu>
+                            </uc:DisplayNotebookUserControl.ContextMenu>
+                        </uc:DisplayNotebookUserControl>
+                        <TextBox Text="{Binding Path=Name}" Visibility="{Binding Source={StaticResource NotesVM}, Path=IsVisible}"/>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate> 
         </ListView>

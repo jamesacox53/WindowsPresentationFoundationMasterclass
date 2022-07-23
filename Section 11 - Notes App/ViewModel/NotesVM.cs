@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace Section_11___Notes_App.ViewModel
 {
@@ -35,17 +36,33 @@ namespace Section_11___Notes_App.ViewModel
 
         public CloseApplicationCommand CloseApplicationCommand { get; set; }
 
+        public EditCommand EditCommand { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private Visibility isVisible;
+
+        public Visibility IsVisible
+        {
+            get { return isVisible; }
+            set 
+            {
+                isVisible = value;
+                OnPropertyChanged("IsVisible");
+            }
+        }
 
         public NotesVM()
         {
             NewNotebookCommand = new NewNotebookCommand(this);
             NewNoteCommand = new NewNoteCommand(this);
             CloseApplicationCommand = new CloseApplicationCommand();
+            EditCommand = new EditCommand(this);
 
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
+
+            IsVisible = Visibility.Collapsed;
 
             GetNotebooks();
         }
@@ -106,6 +123,11 @@ namespace Section_11___Notes_App.ViewModel
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void StartEditing()
+        {
+            IsVisible = Visibility.Visible;
         }
     }
 }
