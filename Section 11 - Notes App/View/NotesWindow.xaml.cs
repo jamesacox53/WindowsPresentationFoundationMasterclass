@@ -265,5 +265,19 @@ namespace Section_11___Notes_App.View
 
             contents.Load(fileStream, DataFormats.Rtf);
         }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+
+            if (!string.IsNullOrEmpty(App.UserId)) return;
+            
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.ShowDialog();
+
+            if (notesVM == null) return;
+
+            notesVM.GetNotebooks();
+        }
     }
 }

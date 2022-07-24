@@ -132,7 +132,7 @@ namespace Section_11___Notes_App.ViewModel
             GetNotes();
         }
 
-        private void GetNotebooks()
+        public void GetNotebooks()
         {
             List<Notebook> notebooks = DatabaseHelper.Read<Notebook>();
 
