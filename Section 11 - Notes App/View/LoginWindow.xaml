@@ -14,7 +14,13 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid DataContext="{StaticResource LoginVM}">
-        <StackPanel Visibility="{Binding Path=LoginVisibility}">
+        <StackPanel Visibility="{Binding Path=LoginVisibility}" Margin="10">
+            <TextBlock Text="Username:"/>
+            <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Password:"/>
+            <TextBox Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Content="Login" Command="{Binding Path=LoginCommand}" CommandParameter="{Binding User}" Margin="0,5"/>
+            
             <TextBlock Text="Register" Foreground="DodgerBlue" TextDecorations="Underline">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
@@ -24,7 +30,19 @@
             </TextBlock>
         </StackPanel>
 
-        <StackPanel Visibility="{Binding Path=RegisterVisibility}">
+        <StackPanel Visibility="{Binding Path=RegisterVisibility}" Margin="10">
+            <TextBlock Text="Username:"/>
+            <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="First Name:"/>
+            <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Last Name:"/>
+            <TextBox Text="{Binding Lastname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Password:"/>
+            <TextBox Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Confirm Password:"/>
+            <TextBox Text="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Content="Register" Command="{Binding Path=RegisterCommand}" CommandParameter="{Binding Path=User}" Margin="0,5"/>
+            
             <TextBlock Text="Login" Foreground="DodgerBlue" TextDecorations="Underline">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">

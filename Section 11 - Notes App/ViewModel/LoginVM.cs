@@ -13,11 +13,79 @@ namespace Section_11___Notes_App.ViewModel
     public class LoginVM : INotifyPropertyChanged
     {
         private User user;
-
         public User User
         {
             get { return user; }
-            set { user = value; }
+            set 
+            {
+                user = value;
+                OnPropertyChanged("User");
+            }
+        }
+
+        private string username;
+        public string Username
+        {
+            get { return username; }
+            set 
+            {
+                username = value;
+                OnPropertyChanged("Username");
+
+                User = CreateUserFromProperties();
+            }
+        }
+
+        private string password;
+        public string Password
+        {
+            get { return password; }
+            set
+            {
+                password = value;
+                OnPropertyChanged("Password");
+
+                User = CreateUserFromProperties();
+            }
+        }
+
+        private string name;
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                name = value;
+                OnPropertyChanged("Name");
+
+                User = CreateUserFromProperties();
+            }
+        }
+
+        private string lastname;
+        public string Lastname
+        {
+            get { return lastname; }
+            set
+            {
+                lastname = value;
+                OnPropertyChanged("Lastname");
+
+                User = CreateUserFromProperties();
+            }
+        }
+
+        private string confirmPassword;
+        public string ConfirmPassword
+        {
+            get { return confirmPassword; }
+            set
+            {
+                confirmPassword = value;
+                OnPropertyChanged("ConfirmPassword");
+
+                User = CreateUserFromProperties();
+            }
         }
 
         public RegisterCommand RegisterCommand { get; set; }
@@ -54,12 +122,29 @@ namespace Section_11___Notes_App.ViewModel
 
         public LoginVM()
         {
+            User = new User();
+
             RegisterCommand = new RegisterCommand(this);
             LoginCommand = new LoginCommand(this);
             ShowRegisterCommand = new ShowRegisterCommand(this);
 
             SetInitialVisibilities();
         }
+
+        private User CreateUserFromProperties()
+        {
+            User tempUser = new User()
+            {
+                Username = this.Username,
+                Name = this.Name,
+                Lastname = this.Lastname,
+                Password = this.Password,
+                ConfirmPassword = this.ConfirmPassword
+            };
+
+            return tempUser;
+        }
+
 
         public void SwitchViews()
         {
@@ -86,6 +171,16 @@ namespace Section_11___Notes_App.ViewModel
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Login()
+        {
+
+        }
+
+        public void Register()
+        {
+
         }
     }
 }
