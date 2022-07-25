@@ -1,5 +1,6 @@
 ﻿using Section_11___Notes_App.Model;
 using Section_11___Notes_App.ViewModel.Commands;
+using Section_11___Notes_App.ViewModel.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -178,9 +179,9 @@ namespace Section_11___Notes_App.ViewModel
 
         }
 
-        public void Register()
+        public async void Register()
         {
-
+            FirebaseAuthHelper.Register(User);
         }
     }
 }
