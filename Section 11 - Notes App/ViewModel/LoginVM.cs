@@ -97,6 +97,8 @@ namespace Section_11___Notes_App.ViewModel
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        public event EventHandler Authenticated;
+
         private Visibility loginVisibility;
 
         public Visibility LoginVisibility
@@ -174,14 +176,24 @@ namespace Section_11___Notes_App.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void Login()
+        public async Task Login()
         {
+            bool successfullyLogin = await FirebaseAuthHelper.Login(User);
 
+            if (successfullyLogin)
+            {
+                Authenticated?.Invoke(this, new EventArgs());
+            }
         }
 
-        public async void Register()
+        public async Task Register()
         {
-            FirebaseAuthHelper.Register(User);
+            bool successfullyRegister = await FirebaseAuthHelper.Register(User);
+
+            if (successfullyRegister)
+            {
+                Authenticated?.Invoke(this, new EventArgs());
+            }
         }
     }
 }

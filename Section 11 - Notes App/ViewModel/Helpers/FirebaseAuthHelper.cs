@@ -53,6 +53,46 @@ namespace Section_11___Notes_App.ViewModel.Helpers
                 }
             }
         }
+
+        public static async Task<bool> Login(User user)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var body = new
+                {
+                    email = user.Username,
+                    password = user.Password,
+                    returnSecureToken = true
+                };
+
+                string bodyJson = JsonConvert.SerializeObject(body);
+                StringContent data = new StringContent(bodyJson, Encoding.UTF8, "application/json");
+                string firebaseUrl = $"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={api_key}";
+                HttpResponseMessage response = await client.PostAsync(firebaseUrl, data);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string resultJson = await response.Content.ReadAsStringAsync();
+                    FirebaseResult? result = JsonConvert.DeserializeObject<FirebaseResult>(resultJson);
+
+                    if (result == null) return false;
+
+                    App.UserId = result.localId;
+
+                    return true;
+                }
+                else
+                {
+                    string errorJson = await response.Content.ReadAsStringAsync();
+                    FirebaseError? error = JsonConvert.DeserializeObject<FirebaseError>(errorJson);
+                    if (error == null) return false;
+
+                    MessageBox.Show(error.error.message);
+
+                    return false;
+                }
+            }
+        }
     }
 
     public class FirebaseResult

@@ -107,9 +107,10 @@ namespace Section_11___Notes_App.ViewModel
 
         public void CreateNotebook()
         {
-            Notebook newNotebook = new Notebook() 
+            Notebook newNotebook = new Notebook()
             {
-                Name = "New Notebook"
+                Name = "New Notebook",
+                UserId = App.UserId
             };
 
             DatabaseHelper.Insert<Notebook>(newNotebook);
@@ -134,7 +135,7 @@ namespace Section_11___Notes_App.ViewModel
 
         public void GetNotebooks()
         {
-            List<Notebook> notebooks = DatabaseHelper.Read<Notebook>();
+            IEnumerable<Notebook> notebooks = DatabaseHelper.Read<Notebook>().Where(nb => nb.UserId == App.UserId); 
 
             Notebooks.Clear();
 
