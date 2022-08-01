@@ -6,15 +6,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Path = System.IO.Path;
 
-namespace Section_11___Notes_App.ViewModel.Helpers
+namespace Section_11___Notes_App.ViewModel.Helpers.Database
 {
-    public class DatabaseHelper
+    public class SQLLiteDatabaseHelper : IDatabaseHelper
     {
-        public static string dbFile = Path.Combine(Environment.CurrentDirectory, "notesDb.db3");
 
-        public static bool Insert<T>(T item)
+        private string dbPath = Path.Combine(Environment.CurrentDirectory, "notesDb.db3");
+
+        public string DBPath 
+        { 
+            get 
+            {
+                return DBPath;
+            } 
+        }
+
+        public async Task<bool> Insert<T>(T item)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(dbFile))
+            using (SQLiteConnection connection = new SQLiteConnection(DBPath))
             {
                 connection.CreateTable<T>();
                 int numRowsInserted = connection.Insert(item);
@@ -30,9 +39,9 @@ namespace Section_11___Notes_App.ViewModel.Helpers
             }
         }
 
-        public static bool Update<T>(T item)
+        public async Task<bool> Update<T>(T item)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(dbFile))
+            using (SQLiteConnection connection = new SQLiteConnection(DBPath))
             {
                 connection.CreateTable<T>();
                 int numRowsInserted = connection.Update(item);
@@ -48,9 +57,9 @@ namespace Section_11___Notes_App.ViewModel.Helpers
             }
         }
 
-        public static bool Delete<T>(T item)
+        public async Task<bool> Delete<T>(T item)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(dbFile))
+            using (SQLiteConnection connection = new SQLiteConnection(DBPath))
             {
                 connection.CreateTable<T>();
                 int numRowsInserted = connection.Delete(item);
@@ -66,9 +75,9 @@ namespace Section_11___Notes_App.ViewModel.Helpers
             }
         }
 
-        public static List<T> Read<T>() where T : new()
+        public async Task<List<T>> Read<T>() where T : new()
         {
-            using (SQLiteConnection connection = new SQLiteConnection(dbFile))
+            using (SQLiteConnection connection = new SQLiteConnection(DBPath))
             {
                 connection.CreateTable<T>();
                 List<T> items = connection.Table<T>().ToList();

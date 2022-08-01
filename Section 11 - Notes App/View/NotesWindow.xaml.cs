@@ -18,8 +18,8 @@ using System.Windows.Controls.Primitives;
 using Section_11___Notes_App.ViewModel;
 using Section_11___Notes_App.Model;
 using Path = System.IO.Path;
-using Section_11___Notes_App.ViewModel.Helpers;
 using System.IO;
+using Section_11___Notes_App.ViewModel.Helpers.Database;
 
 namespace Section_11___Notes_App.View
 {
@@ -28,6 +28,8 @@ namespace Section_11___Notes_App.View
     /// </summary>
     public partial class NotesWindow : Window
     {
+        private IDatabaseHelper databaseHelper;
+        
         private SpeechRecognitionEngine speechRecognizer;
 
         private NotesVM? notesVM;
@@ -36,6 +38,8 @@ namespace Section_11___Notes_App.View
         {
             InitializeComponent();
 
+            databaseHelper = DatabaseHelper.Database;
+            
             speechRecognizer = SetUpSpeechRecognitionEngine();
 
             notesVM = (Resources["NotesVM"] as NotesVM); 
@@ -222,7 +226,7 @@ namespace Section_11___Notes_App.View
             contentsRichTextBox.Selection.ApplyPropertyValue(Inline.FontSizeProperty, fontSizeString);
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (notesVM == null) return;
 
@@ -236,7 +240,7 @@ namespace Section_11___Notes_App.View
 
             selectedNote.FileLocation = rtfFilePath;
 
-            DatabaseHelper.Update(selectedNote);
+            await databaseHelper.Update(selectedNote);
 
             FileStream fileStream = new FileStream(rtfFilePath, FileMode.Create);
 
