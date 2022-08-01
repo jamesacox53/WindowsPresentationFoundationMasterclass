@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Section_11___Notes_App.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,6 @@ namespace Section_11___Notes_App.ViewModel.Helpers.Database
             {
                 return dbPath;
             } 
-        }
-
-        public Task<bool> Delete<T>(T item)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<bool> Insert<T>(T item)
@@ -75,9 +71,43 @@ namespace Section_11___Notes_App.ViewModel.Helpers.Database
             }
         }
 
-        public Task<bool> Update<T>(T item)
+        public async Task<bool> Update<T>(T item) where T : IHasId
         {
-            throw new NotImplementedException();
+            string jsonBody = JsonConvert.SerializeObject(item);
+            StringContent content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+            using (var client = new HttpClient())
+            {
+                string url = $"{DBPath}{item.GetType().Name.ToLower()}/{item.Id}.json";
+                var result = await client.PatchAsync(url, content);
+
+                if (result.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public async Task<bool> Delete<T>(T item) where T : IHasId
+        {
+            using (var client = new HttpClient())
+            {
+                string url = $"{DBPath}{item.GetType().Name.ToLower()}/{item.Id}.json";
+                var result = await client.DeleteAsync(url);
+
+                if (result.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 }
