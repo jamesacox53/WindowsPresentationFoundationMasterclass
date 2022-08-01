@@ -44,13 +44,35 @@ namespace Section_11___Notes_App.ViewModel.Helpers.Database
                     return false;
                 }
             }
-
- 
         }
 
-        public Task<List<T>> Read<T>() where T : new()
+        public async Task<List<T>> Read<T>() where T : new()
         {
-            throw new NotImplementedException();
+            using (var client = new HttpClient())
+            {
+                string url = $"{DBPath}{typeof(T).Name.ToLower()}.json";
+                var result = await client.GetAsync(url);
+                string jsonResult = await result.Content.ReadAsStringAsync();
+
+                if (result.IsSuccessStatusCode)
+                {
+                    Dictionary<string, T>? objects = JsonConvert.DeserializeObject<Dictionary<string, T>>(jsonResult);
+                    if (objects == null) return null;
+
+                    List<T> values = new List<T>();
+
+                    foreach(KeyValuePair<string, T> dictionaryEntry in objects)
+                    {
+                        values.Add(dictionaryEntry.Value);
+                    }
+
+                    return values;
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         public Task<bool> Update<T>(T item)
