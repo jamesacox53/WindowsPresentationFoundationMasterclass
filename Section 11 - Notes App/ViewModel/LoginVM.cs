@@ -1,6 +1,7 @@
 ﻿using Section_11___Notes_App.Model;
 using Section_11___Notes_App.ViewModel.Commands;
-using Section_11___Notes_App.ViewModel.Helpers;
+using Section_11___Notes_App.ViewModel.Helpers.Database;
+using Section_11___Notes_App.ViewModel.Helpers.Database.Firebase;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,8 +14,8 @@ namespace Section_11___Notes_App.ViewModel
 {
     public class LoginVM : INotifyPropertyChanged
     {
-        private User user;
-        public User User
+        private IUser user;
+        public IUser User
         {
             get { return user; }
             set 
@@ -92,7 +93,7 @@ namespace Section_11___Notes_App.ViewModel
         public RegisterCommand RegisterCommand { get; set; }
         public LoginCommand LoginCommand { get; set; }
         public ShowRegisterCommand ShowRegisterCommand { get; set; }
-
+        
         private bool isShowingRegisterView;
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -125,7 +126,7 @@ namespace Section_11___Notes_App.ViewModel
 
         public LoginVM()
         {
-            User = new User();
+            User = Database.DatabaseHelper.CreateUser();
 
             RegisterCommand = new RegisterCommand(this);
             LoginCommand = new LoginCommand(this);
@@ -134,16 +135,14 @@ namespace Section_11___Notes_App.ViewModel
             SetInitialVisibilities();
         }
 
-        private User CreateUserFromProperties()
+        private IUser CreateUserFromProperties()
         {
-            User tempUser = new User()
-            {
-                Username = this.Username,
-                Name = this.Name,
-                Lastname = this.Lastname,
-                Password = this.Password,
-                ConfirmPassword = this.ConfirmPassword
-            };
+            IUser tempUser = Database.DatabaseHelper.CreateUser();
+            tempUser.Username = this.Username;
+            tempUser.Name = this.Name;
+            tempUser.Lastname = this.Lastname;
+            tempUser.Password = this.Password;
+            tempUser.ConfirmPassword = this.ConfirmPassword;
 
             return tempUser;
         }
@@ -178,7 +177,7 @@ namespace Section_11___Notes_App.ViewModel
 
         public async Task Login()
         {
-            bool successfullyLogin = await FirebaseAuthHelper.Login(User);
+            bool successfullyLogin = await Database.AuthHelper.Login(User);
 
             if (successfullyLogin)
             {
@@ -188,7 +187,7 @@ namespace Section_11___Notes_App.ViewModel
 
         public async Task Register()
         {
-            bool successfullyRegister = await FirebaseAuthHelper.Register(User);
+            bool successfullyRegister = await Database.AuthHelper.Register(User);
 
             if (successfullyRegister)
             {

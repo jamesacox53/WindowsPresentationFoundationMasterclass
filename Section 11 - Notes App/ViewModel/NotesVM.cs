@@ -13,13 +13,11 @@ namespace Section_11___Notes_App.ViewModel
 {
     public class NotesVM : INotifyPropertyChanged
     {
-        private IDatabaseHelper databaseHelper;
+        public ObservableCollection<INotebook> Notebooks { get; set; }
 
-        public ObservableCollection<Notebook> Notebooks { get; set; }
+        private INotebook selectedNotebook;
 
-        private Notebook selectedNotebook;
-
-        public Notebook SelectedNotebook
+        public INotebook SelectedNotebook
         {
             get { return selectedNotebook; }
             set 
@@ -30,9 +28,9 @@ namespace Section_11___Notes_App.ViewModel
             }
         }
 
-        private Note selectedNote;
+        private INote selectedNote;
 
-        public Note SelectedNote
+        public INote SelectedNote
         {
             get { return selectedNote; }
             set
@@ -43,7 +41,7 @@ namespace Section_11___Notes_App.ViewModel
             }
         }
 
-        public ObservableCollection<Note> Notes { get; set; }
+        public ObservableCollection<INote> Notes { get; set; }
 
         public NewNotebookCommand NewNotebookCommand { get; set; }
 
@@ -89,8 +87,6 @@ namespace Section_11___Notes_App.ViewModel
 
         public NotesVM()
         {
-            databaseHelper = DatabaseHelper.Database;
-
             NewNotebookCommand = new NewNotebookCommand(this);
             NewNoteCommand = new NewNoteCommand(this);
             CloseApplicationCommand = new CloseApplicationCommand();
@@ -99,8 +95,8 @@ namespace Section_11___Notes_App.ViewModel
             EditNoteCommand = new EditNoteCommand(this);
             EndNoteEditingCommand = new EndNoteEditingCommand(this);
 
-            Notebooks = new ObservableCollection<Notebook>();
-            Notes = new ObservableCollection<Note>();
+            Notebooks = new ObservableCollection<INotebook>();
+            Notes = new ObservableCollection<INote>();
 
             IsVisible = Visibility.Collapsed;
 
@@ -111,41 +107,33 @@ namespace Section_11___Notes_App.ViewModel
 
         public async void CreateNotebook()
         {
-            Notebook newNotebook = new Notebook()
-            {
-                Name = "New Notebook",
-                UserId = App.UserId
-            };
+            INotebook newNotebook = Database.DatabaseHelper.CreateNotebook(App.User);
 
-            await databaseHelper.Insert<Notebook>(newNotebook);
+            if (newNotebook == null) return;
+
+            await Database.DatabaseHelper.InsertNotebook(newNotebook);
 
             GetNotebooks();
         }
 
-        public async void CreateNote(int notebookId)
+        public async void CreateNote(INotebook notebook)
         {
-            Note newNote = new Note()
-            {
-                Title = "New Note",
-                NotebookId = notebookId,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-            };
+            INote newNote = Database.DatabaseHelper.CreateNote(notebook);
 
-            await databaseHelper.Insert<Note>(newNote);
+            await Database.DatabaseHelper.InsertNote(newNote);
 
             GetNotes();
         }
 
         public async void GetNotebooks()
         {
-            List<Notebook> listOfNotebooks = await databaseHelper.Read<Notebook>();
-
-            IEnumerable<Notebook> notebooks = listOfNotebooks.Where(nb => nb.UserId == App.UserId); 
+            IEnumerable<INotebook> notebooks = await Database.DatabaseHelper.ReadNotebooks(App.User); 
 
             Notebooks.Clear();
 
-            foreach(Notebook notebook in notebooks)
+            if (notebooks == null) return;
+
+            foreach(INotebook notebook in notebooks)
             {
                 Notebooks.Add(notebook);
             }
@@ -155,13 +143,13 @@ namespace Section_11___Notes_App.ViewModel
         {
             if (SelectedNotebook == null) return;
 
-            List<Note> listOfNotes = await databaseHelper.Read<Note>();
-
-            IEnumerable<Note> notes = listOfNotes.Where(n => n.NotebookId == SelectedNotebook.Id);
+            IEnumerable<INote> notes = await Database.DatabaseHelper.ReadNotes(SelectedNotebook);
 
             Notes.Clear();
 
-            foreach (Note note in notes)
+            if (notes == null) return;
+
+            foreach (INote note in notes)
             {
                 Notes.Add(note);
             }
@@ -177,11 +165,11 @@ namespace Section_11___Notes_App.ViewModel
             IsVisible = Visibility.Visible;
         }
 
-        public async void StopEditing(Notebook notebook)
+        public async void StopEditing(INotebook notebook)
         {
             IsVisible = Visibility.Collapsed;
 
-            await databaseHelper.Update(notebook);
+            await  Database.DatabaseHelper.UpdateNotebook(notebook);
 
             GetNotebooks();
         }
@@ -191,11 +179,11 @@ namespace Section_11___Notes_App.ViewModel
             IsVisibleNote = Visibility.Visible;
         }
 
-        public async void StopEditingNote(Note note)
+        public async void StopEditingNote(INote note)
         {
             IsVisibleNote = Visibility.Collapsed;
 
-            await databaseHelper.Update(note);
+            await Database.DatabaseHelper.UpdateNote(note);
 
             GetNotes();
         }

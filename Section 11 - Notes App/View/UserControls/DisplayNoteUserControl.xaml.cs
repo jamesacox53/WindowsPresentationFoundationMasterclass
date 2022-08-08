@@ -21,15 +21,15 @@ namespace Section_11___Notes_App.View.UserControls
     /// </summary>
     public partial class DisplayNoteUserControl : UserControl
     {
-        public Note Note
+        public INote Note
         {
-            get { return (Note)GetValue(NoteProperty); }
+            get { return (INote)GetValue(NoteProperty); }
             set { SetValue(NoteProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NoteProperty =
-            DependencyProperty.Register("Note", typeof(Note), typeof(DisplayNoteUserControl), new PropertyMetadata(null, SetValues));
+            DependencyProperty.Register("Note", typeof(INote), typeof(DisplayNoteUserControl), new PropertyMetadata(null, SetValues));
 
         private static void SetValues(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

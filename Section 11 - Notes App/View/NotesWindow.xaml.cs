@@ -27,9 +27,7 @@ namespace Section_11___Notes_App.View
     /// Interaction logic for NotesWindow.xaml
     /// </summary>
     public partial class NotesWindow : Window
-    {
-        private IDatabaseHelper databaseHelper;
-        
+    { 
         private SpeechRecognitionEngine speechRecognizer;
 
         private NotesVM? notesVM;
@@ -37,8 +35,6 @@ namespace Section_11___Notes_App.View
         public NotesWindow()
         {
             InitializeComponent();
-
-            databaseHelper = DatabaseHelper.Database;
             
             speechRecognizer = SetUpSpeechRecognitionEngine();
 
@@ -230,46 +226,42 @@ namespace Section_11___Notes_App.View
         {
             if (notesVM == null) return;
 
-            Note selectedNote = notesVM.SelectedNote;
+            INote selectedNote = notesVM.SelectedNote;
 
             if (selectedNote == null) return;
 
-            string rtfFileName = $"{selectedNote.Id}.rtf";
-
-            string rtfFilePath = Path.Combine(Environment.CurrentDirectory, rtfFileName);
-
-            selectedNote.FileLocation = rtfFilePath;
-
-            await databaseHelper.Update(selectedNote);
-
-            FileStream fileStream = new FileStream(rtfFilePath, FileMode.Create);
-
-            TextRange contents = new TextRange(contentsRichTextBox.Document.ContentStart, contentsRichTextBox.Document.ContentEnd);
-
-            contents.Save(fileStream, DataFormats.Rtf);
+            try
+            {
+                await Database.DatabaseHelper.UpdateRTFFile(contentsRichTextBox, selectedNote);
+            }
+            catch (Exception)
+            {
+                return;
+            }
         }
 
-        private void NotesVM_SelectedNoteChanged(object? sender, EventArgs e)
+        private async void NotesVM_SelectedNoteChanged(object? sender, EventArgs e)
         {
             contentsRichTextBox.Document.Blocks.Clear();
 
             if (notesVM == null) return;
 
-            Note selectedNote = notesVM.SelectedNote;
+            INote selectedNote = notesVM.SelectedNote;
 
             if (selectedNote == null) return;
 
-            string fileLocation = selectedNote.FileLocation;
+            try
+            {
+                await Database.DatabaseHelper.LoadRTFFileIntoRichTextBox(contentsRichTextBox, selectedNote);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+            }
 
-            if (string.IsNullOrEmpty(fileLocation)) return;
-
-            FileStream fileStream = new FileStream(fileLocation, FileMode.Open);
-
-            TextRange contents = new TextRange(contentsRichTextBox.Document.ContentStart, contentsRichTextBox.Document.ContentEnd);
-
-            contents.Load(fileStream, DataFormats.Rtf);
-        }
-
+        /*
+        
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
@@ -283,5 +275,7 @@ namespace Section_11___Notes_App.View
 
             notesVM.GetNotebooks();
         }
+
+        */
     }
 }

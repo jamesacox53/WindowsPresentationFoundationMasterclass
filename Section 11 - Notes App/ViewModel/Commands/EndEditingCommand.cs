@@ -26,7 +26,7 @@ namespace Section_11___Notes_App.ViewModel.Commands
 
         public void Execute(object? parameter)
         {
-            Notebook? notebook = (parameter as Notebook);
+            INotebook? notebook = (parameter as INotebook);
 
             if (notebook == null) return;
 

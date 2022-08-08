@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Section_11___Notes_App.View"
         xmlns:vm="clr-namespace:Section_11___Notes_App.ViewModel"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="300" Width="400">
+        Title="LoginWindow" Height="320" Width="300">
     <Window.Resources>
         <ResourceDictionary>
             <vm:LoginVM x:Key="LoginVM"/>
@@ -19,8 +19,23 @@
             <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Password:"/>
             <TextBox Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Grid Margin="0,10,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Database:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+
+                <ComboBox x:Name="LoginComboBox" Grid.Column="1" SelectedIndex="0" SelectionChanged="LoginComboBox_SelectionChanged">
+                    <ComboBoxItem Content="Local"/>
+                    <ComboBoxItem Content="Firebase"/>
+                </ComboBox>
+            </Grid>
+
             <Button Content="Login" Command="{Binding Path=LoginCommand}" CommandParameter="{Binding User}" Margin="0,5"/>
-            
+
             <TextBlock Text="Register" Foreground="DodgerBlue" TextDecorations="Underline">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
@@ -41,6 +56,21 @@
             <TextBox Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Confirm Password:"/>
             <TextBox Text="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Grid Margin="0,10,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Database:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+
+                <ComboBox x:Name="RegisterComboBox" Grid.Column="1" SelectedIndex="0" SelectionChanged="RegisterComboBox_SelectionChanged">
+                    <ComboBoxItem Content="Local"/>
+                    <ComboBoxItem Content="Firebase"/>
+                </ComboBox>
+            </Grid>
+            
             <Button Content="Register" Command="{Binding Path=RegisterCommand}" CommandParameter="{Binding Path=User}" Margin="0,5"/>
             
             <TextBlock Text="Login" Foreground="DodgerBlue" TextDecorations="Underline">

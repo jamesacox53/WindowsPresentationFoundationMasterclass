@@ -26,7 +26,7 @@ namespace Section_11___Notes_App.ViewModel.Commands
 
         public void Execute(object? parameter)
         {
-            Note? note = (parameter as Note);
+            INote? note = (parameter as INote);
 
             if (note == null) return;
 

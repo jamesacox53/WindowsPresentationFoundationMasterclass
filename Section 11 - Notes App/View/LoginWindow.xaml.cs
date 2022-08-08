@@ -1,4 +1,5 @@
 ﻿using Section_11___Notes_App.ViewModel;
+using Section_11___Notes_App.ViewModel.Helpers.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,11 +34,52 @@ namespace Section_11___Notes_App.View
 
         private void LoginVM_Authenticated(object? sender, EventArgs e)
         {
-            Close();
-
             NotesWindow notesWindow = new NotesWindow();
 
             notesWindow.Show();
+
+            Close();
+        }
+
+        private void LoginComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int selectedIndex = LoginComboBox.SelectedIndex;
+
+            SetBothRegisterAndLoginComboBoxes(selectedIndex);
+        }
+
+        private void RegisterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int selectedIndex = RegisterComboBox.SelectedIndex;
+
+            SetBothRegisterAndLoginComboBoxes(selectedIndex);
+        }
+
+        private void SetBothRegisterAndLoginComboBoxes(int selectedIndex)
+        {
+            if ((RegisterComboBox != null) && (RegisterComboBox.SelectedIndex != selectedIndex))
+            {
+                RegisterComboBox.SelectedIndex = selectedIndex;
+            }
+
+            if ((LoginComboBox != null) && LoginComboBox.SelectedIndex != selectedIndex)
+            {
+                LoginComboBox.SelectedIndex = selectedIndex;
+            }
+
+            SetDatabaseHelper(selectedIndex);
+        }
+
+        private void SetDatabaseHelper(int selectedIndex)
+        {
+            if (selectedIndex == 0)
+            {
+                Database.UseLocal();
+            }
+            else
+            {
+                Database.UseFirebase();
+            }
         }
     }
 }

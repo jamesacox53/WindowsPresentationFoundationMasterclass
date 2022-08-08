@@ -8,20 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Section_11___Notes_App.ViewModel.Helpers
+namespace Section_11___Notes_App.ViewModel.Helpers.Database.Firebase
 {
-    public class FirebaseAuthHelper
+    public class FirebaseAuthHelper : IAuthHelper
     {
-        private static string api_key = "APIKey";
+        private string api_key = "ApiKey";
 
-        public static async Task<bool> Register(User user)
+        public async Task<bool> Register(IUser user)
         {
-            using(HttpClient client = new HttpClient())
+            FirebaseUser? firebaseUser = user as FirebaseUser;
+
+            if (firebaseUser == null) return false;
+
+            using (HttpClient client = new HttpClient())
             {
                 var body = new
                 {
-                    email = user.Username,
-                    password = user.Password,
+                    email = firebaseUser.Username,
+                    password = firebaseUser.Password,
                     returnSecureToken = true
                 };
 
@@ -37,7 +41,9 @@ namespace Section_11___Notes_App.ViewModel.Helpers
 
                     if (result == null) return false;
 
-                    App.UserId = result.localId;
+                    firebaseUser.LocalId = result.localId;
+
+                    App.User = firebaseUser;
 
                     return true;
                 }
@@ -46,7 +52,7 @@ namespace Section_11___Notes_App.ViewModel.Helpers
                     string errorJson = await response.Content.ReadAsStringAsync();
                     FirebaseError? error = JsonConvert.DeserializeObject<FirebaseError>(errorJson);
                     if (error == null) return false;
-                    
+
                     MessageBox.Show(error.error.message);
 
                     return false;
@@ -54,14 +60,18 @@ namespace Section_11___Notes_App.ViewModel.Helpers
             }
         }
 
-        public static async Task<bool> Login(User user)
+        public async Task<bool> Login(IUser user)
         {
+            FirebaseUser? firebaseUser = user as FirebaseUser;
+
+            if (firebaseUser == null) return false;
+
             using (HttpClient client = new HttpClient())
             {
                 var body = new
                 {
-                    email = user.Username,
-                    password = user.Password,
+                    email = firebaseUser.Username,
+                    password = firebaseUser.Password,
                     returnSecureToken = true
                 };
 
@@ -77,7 +87,9 @@ namespace Section_11___Notes_App.ViewModel.Helpers
 
                     if (result == null) return false;
 
-                    App.UserId = result.localId;
+                    firebaseUser.LocalId = result.localId;
+
+                    App.User = firebaseUser;
 
                     return true;
                 }
@@ -93,26 +105,5 @@ namespace Section_11___Notes_App.ViewModel.Helpers
                 }
             }
         }
-    }
-
-    public class FirebaseResult
-    {
-        public string kind { get; set; }
-        public string idToken { get; set; }
-        public string email { get; set; }
-        public string refreshToken { get; set; }
-        public string expiresIn { get; set; }
-        public string localId { get; set; }
-    }
-
-    public class FirebaseErrorDetails
-    {
-        public int code { get; set; }
-        public string message { get; set; }
-    }
-
-    public class FirebaseError
-    {
-        public FirebaseErrorDetails error { get; set; }
     }
 }

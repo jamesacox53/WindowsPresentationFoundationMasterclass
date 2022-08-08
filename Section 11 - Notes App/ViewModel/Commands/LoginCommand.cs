@@ -25,7 +25,7 @@ namespace Section_11___Notes_App.ViewModel.Commands
 
         public bool CanExecute(object? parameter)
         {
-            User? user = (parameter as User);
+            IUser? user = (parameter as IUser);
 
             if (user == null) return false;
 

@@ -24,7 +24,7 @@ namespace Section_11___Notes_App.ViewModel.Commands
 
         public bool CanExecute(object? parameter)
         {
-            User? user = (parameter as User);
+            IUser? user = (parameter as IUser);
 
             if (user == null) return false;
 
@@ -37,9 +37,9 @@ namespace Section_11___Notes_App.ViewModel.Commands
             return (string.Equals(user.Password, user.ConfirmPassword));
         }
 
-        public void Execute(object? parameter)
+        public async void Execute(object? parameter)
         {
-            LoginVM.Register();
+            await LoginVM.Register();
         }
     }
 }

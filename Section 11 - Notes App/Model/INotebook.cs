@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Section_11___Notes_App.Model
 {
-    public interface IHasId
+    public interface INotebook
     {
-        public string Id { get; set; }
+        public string Name { get; set; }
     }
 }

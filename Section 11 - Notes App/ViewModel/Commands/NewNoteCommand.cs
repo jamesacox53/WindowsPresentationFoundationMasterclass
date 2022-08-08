@@ -37,16 +37,16 @@ namespace Section_11___Notes_App.ViewModel.Commands
         {
             if (!CheckNotebookExists(parameter)) return;
 
-            Notebook selectedNotebook = parameter as Notebook;
+            INotebook selectedNotebook = parameter as INotebook;
 
-            NotesVM.CreateNote(selectedNotebook.Id);
+            NotesVM.CreateNote(selectedNotebook);
         }
 
         private bool CheckNotebookExists(object? parameter) 
         {
             if (parameter == null) return false;
 
-            Notebook selectedNotebook = parameter as Notebook;
+            INotebook selectedNotebook = parameter as INotebook;
 
             if (selectedNotebook == null) return false;
 
