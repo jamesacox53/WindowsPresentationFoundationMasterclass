@@ -224,11 +224,12 @@ namespace Section_11___Notes_App.ViewModel.Helpers.Database.SQLLite
 
             await Database.DatabaseHelper.UpdateNote(sqlLiteNote);
 
-            FileStream fileStream = new FileStream(rtfFilePath, FileMode.Create);
+            using (FileStream fileStream = new FileStream(rtfFilePath, FileMode.Create))
+            {
+                TextRange contents = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
 
-            TextRange contents = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
-
-            contents.Save(fileStream, DataFormats.Rtf);
+                contents.Save(fileStream, DataFormats.Rtf);
+            }
 
             return true;
         }
@@ -250,11 +251,12 @@ namespace Section_11___Notes_App.ViewModel.Helpers.Database.SQLLite
 
             if (string.IsNullOrEmpty(fileLocation)) return false;
 
-            FileStream fileStream = new FileStream(fileLocation, FileMode.Open);
+            using (FileStream fileStream = new FileStream(fileLocation, FileMode.Open))
+            {
+                TextRange contents = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
 
-            TextRange contents = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
-
-            contents.Load(fileStream, DataFormats.Rtf);
+                contents.Load(fileStream, DataFormats.Rtf);
+            }
 
             return true;
         }

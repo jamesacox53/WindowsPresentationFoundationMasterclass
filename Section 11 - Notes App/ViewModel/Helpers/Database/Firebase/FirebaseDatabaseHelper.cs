@@ -318,11 +318,12 @@ namespace Section_11___Notes_App.ViewModel.Helpers.Database.Firebase
 
             await Database.DatabaseHelper.UpdateNote(firebaseNote);
 
-            FileStream fileStream = new FileStream(rtfFilePath, FileMode.Create);
+            using (FileStream fileStream = new FileStream(rtfFilePath, FileMode.Create))
+            {
+                TextRange contents = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
 
-            TextRange contents = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
-
-            contents.Save(fileStream, DataFormats.Rtf);
+                contents.Save(fileStream, DataFormats.Rtf);
+            }
 
             return true;
         }
@@ -344,17 +345,18 @@ namespace Section_11___Notes_App.ViewModel.Helpers.Database.Firebase
 
             if (string.IsNullOrEmpty(fileLocation)) return false;
 
-            FileStream fileStream = new FileStream(fileLocation, FileMode.Open);
-
-            TextRange contents = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
-
-            try
+            using (FileStream fileStream = new FileStream(fileLocation, FileMode.Open))
             {
-                contents.Load(fileStream, DataFormats.Rtf);
-            }
-            catch (Exception)
-            {
-                return false;
+                TextRange contents = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
+
+                try
+                {
+                    contents.Load(fileStream, DataFormats.Rtf);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
 
             return true;

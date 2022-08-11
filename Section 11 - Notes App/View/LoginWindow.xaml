@@ -7,7 +7,9 @@
         xmlns:local="clr-namespace:Section_11___Notes_App.View"
         xmlns:vm="clr-namespace:Section_11___Notes_App.ViewModel"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="320" Width="300">
+        Title="Login"
+        Height="320"
+        Width="300">
     <Window.Resources>
         <ResourceDictionary>
             <vm:LoginVM x:Key="LoginVM"/>

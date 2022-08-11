@@ -6,13 +6,26 @@
     <RootNamespace>Section_11___Notes_App</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\Icon\WPFIconICO.ico</ApplicationIcon>
+    <PackageIcon>WPFIconPNG.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Images\Icon\WPFIconICO.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="System.Speech" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Images\Icon\WPFIconPNG.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

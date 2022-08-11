@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:Section_11___Notes_App.ViewModel"
         xmlns:uc="clr-namespace:Section_11___Notes_App.View.UserControls"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="350" Width="700">
+        Title="Notes" Height="350" Width="700">
     <Window.Resources>
         <vm:NotesVM x:Key="NotesVM"/>
     </Window.Resources>
