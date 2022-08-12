@@ -15,10 +15,12 @@ namespace Section_16___RSS_Reader_App.ViewModel
 
         public GetRssCommand GetRssCommand { get; set; }
 
-        private IRSSHelper rssHelper = new FakeRSSHelper();
+        private IRSSHelper rssHelper;
 
         public MainVM()
         {
+            rssHelper = new RSSHelper();
+
             Items = new ObservableCollection<Item>();
 
             GetRssCommand = new GetRssCommand(this);
