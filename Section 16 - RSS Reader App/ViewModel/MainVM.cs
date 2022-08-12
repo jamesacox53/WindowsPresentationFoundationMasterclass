@@ -15,7 +15,7 @@ namespace Section_16___RSS_Reader_App.ViewModel
 
         public GetRssCommand GetRssCommand { get; set; }
 
-        private RSSHelper rssHelper = new RSSHelper();
+        private IRSSHelper rssHelper = new FakeRSSHelper();
 
         public MainVM()
         {

@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 
 namespace Section_16___RSS_Reader_App.ViewModel
 {
-    public class RSSHelper
+    public class RSSHelper : IRSSHelper
     {
         private const string yahooNewsURL = $"https://www.yahoo.com/news/rss";
 
