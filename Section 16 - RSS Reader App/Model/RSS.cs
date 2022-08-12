@@ -4,48 +4,44 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Section_16___RSS_Reader_App.Model
 {
-    public class RSS
+    [XmlRoot(ElementName = "rss")]
+    public class YahooNews
     {
+        [XmlElement(ElementName = "channel")]
         public Channel Channel { get; set; }
     }
 
-    public class CData
+    [XmlRoot(ElementName = "channel")]
+    public class Channel
     {
-        public string ActualString { get; set; }
+        [XmlElement(ElementName = "item")]
+        public List<Item> Item { get; set; }
     }
 
+    [XmlRoot(ElementName = "item")]
     public class Item
     {
-        public CData Title { get; set; }
-        public CData Description { get; set; }
+        [XmlElement(ElementName = "title")]
+        public String Title { get; set; }
+        [XmlElement(ElementName = "link")]
         public string Link { get; set; }
+       
         private string pubDate;
+        [XmlElement(ElementName = "pubDate")]
         public string PubDate
         {
             get { return pubDate; }
             set
             {
                 pubDate = value;
-                PublishedDate = DateTime.ParseExact(pubDate, "ddd, dd MMM yyyy HH:mm:ss GMT", CultureInfo.InvariantCulture);
+                PublishedDate = DateTime.Parse(value);
             }
         }
 
-        public DateTime PublishedDate { get; set; }
-        public string Creator { get; set; }
-    }
-
-    public class Channel
-    {
-        public List<Item> Item { get; set; }
-
-        public string Link { get; set; }
-    }
-
-    public class FinZenBlog
-    {
-        public RSS RSS { get; set; }
+        public DateTime PublishedDate { get; set; }        
     }
 }

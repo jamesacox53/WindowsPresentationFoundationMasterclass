@@ -11,28 +11,28 @@ using System.Xml.Serialization;
 
 namespace Section_16___RSS_Reader_App.ViewModel
 {
-    public class RSSHelperVM
+    public class RSSHelper
     {
-        private const string finZenBlogURL = $"https://www.finzen.mx/blog-feed.xml";
+        private const string yahooNewsURL = $"https://www.yahoo.com/news/rss";
 
         public async Task<List<Item>?> GetPosts()
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(FinZenBlog));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(YahooNews));
 
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage result = await client.GetAsync(finZenBlogURL);
+                HttpResponseMessage result = await client.GetAsync(yahooNewsURL);
                 string xmlResult = await result.Content.ReadAsStringAsync();
 
                 if (result.IsSuccessStatusCode)
                 {
                     using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xmlResult)))
                     {
-                        FinZenBlog? finZenBlog = xmlSerializer.Deserialize(stream) as FinZenBlog;
+                        YahooNews? yahooNews = xmlSerializer.Deserialize(stream) as YahooNews;
 
-                        if (finZenBlog == null) return null;
+                        if (yahooNews == null) return null;
 
-                        return GetItem(finZenBlog);
+                        return GetItem(yahooNews);
                     }
                 }
 
@@ -40,15 +40,11 @@ namespace Section_16___RSS_Reader_App.ViewModel
             }
         }
 
-        private List<Item>? GetItem(FinZenBlog finZenBlog)
+        private List<Item>? GetItem(YahooNews yahooNews)
         {
-            if (finZenBlog == null) return null;
+            if (yahooNews == null) return null;
 
-            RSS rss = finZenBlog.RSS;
-
-            if (rss == null) return null;
-
-            Channel channel = rss.Channel;
+            Channel channel = yahooNews.Channel;
 
             if (channel == null) return null;
 
